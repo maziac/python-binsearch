@@ -1,3 +1,5 @@
+import bin_dumper
+
 from pathlib import Path
 
 prg_version = "0.1.0"
@@ -48,6 +50,7 @@ while (i < len):
 		# It is the filename (probably).
 		# Open file:
 		print(arg)
+		read_file(arg)
 
 	# Next
 	i += 1
