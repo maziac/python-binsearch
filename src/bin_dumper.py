@@ -49,15 +49,15 @@ def dump(offset: int, size: int, writer):
 			# 	stdout.flush()
 
 
-def parse_search_string(search_string: str) -> str:
+def parse_search_string(search_string: str) -> bytes:
 	"""
     Parses the search string.
 	A search string contains search characters but can also contain decimals
 	or hex numbers.
 	'search_string' - E.g. "a\\xFA,\\d7,bc\\d9"
-	Returns: E.g. []u8{ 'a', 0xFA, 7, 'b', 'c', 9 }
-    """
-	search_bytes = ""
+	Returns: a string with \\ converted to a number
+	"""
+	search_bytes = b""
 	slen = len(search_string)
 	i = 0
 
@@ -72,7 +72,7 @@ def parse_search_string(search_string: str) -> str:
 			# Check for \, decimal or hex
 			if c == '\\':
 				# The letter \
-				search_bytes += c
+				search_bytes += bytes(c, 'ascii')
 			elif c == 'd' or c == 'x':
 				# A decimal or hex will follow
 				radix = 16
@@ -89,8 +89,8 @@ def parse_search_string(search_string: str) -> str:
 				if k == i:
 					raise Exception("Expected a number.")
 				# Now convert decimal value
-				val = int(search_string[i,k], radix);
-				search_bytes += val
+				val = int(search_string[i:k], radix)
+				search_bytes += val.to_bytes(1, 'little')
 				# Next
 				i = k
 			else:
@@ -98,7 +98,7 @@ def parse_search_string(search_string: str) -> str:
 				raise Exception("Expected 'd' or 'x'.")
 		else:
 			# "Normal" letter
-			search_bytes += c
+			search_bytes += bytes(c, 'ascii')
 
 		# Next
 		i += 1
