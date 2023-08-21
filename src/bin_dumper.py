@@ -1,14 +1,17 @@
 
 import sys
+import os
+
 
 buffer = None
 
 
-
 def read_file(filepath: str):
-    """ Reads a file, allocates data and makes 'buffer' point to it. """
-    global buffer
-    buffer = open(filepath, 'rb')
+	""" Reads a file, allocates data and makes 'buffer' point to it. """
+	global buffer
+	buffer = None	# Just in case an exception is catched
+	file = open(filepath, 'rb')
+	buffer = file.read()
 
 
 def read_stdio():
@@ -29,17 +32,21 @@ def dump(offset: int, size: int, writer):
 	"""
 	global buffer
 	if buffer is not None:
-		len = buffer.length
+		blen = len(buffer)
 		start = offset
 		count = size
-		if start < len:
+		if start < blen:
 			if start < 0:
 				count += start
 				start = 0
-			if count > len - start:
-				count = len - start
+			if count > blen - start:
+				count = blen - start
 			end = start + count
-			sys.stdout.write(buffer[start, end])
+			return buffer[start:end]
+
+			# with os.fdopen(sys.stdout.fileno(), "wb", closefd=False) as stdout:
+			# 	stdout.write(slice)
+			# 	stdout.flush()
 
 
 def parse_search_string(search_string: str) -> str:
@@ -51,7 +58,7 @@ def parse_search_string(search_string: str) -> str:
 	Returns: E.g. []u8{ 'a', 0xFA, 7, 'b', 'c', 9 }
     """
 	search_bytes = ""
-	slen = search_string.length
+	slen = len(search_string)
 	i = 0
 
 	while i < slen:
@@ -116,9 +123,9 @@ def search(offset: int, search_string: str) -> int:
 	if buffer is not None:
 		# Parse search string
 		search_bytes = parse_search_string(search_string)
-		slen = search_bytes.length
+		slen = len(search_bytes)
 		if slen > 0:
-			blen = buffer.length
+			blen = len(buffer)
 			offs = offset
 			if offs < 0:
 				offs = 0
