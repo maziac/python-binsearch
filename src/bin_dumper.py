@@ -120,25 +120,27 @@ def search(offset: int, search_string: str) -> int:
 	Returns: The new offset.
     """
 	global buffer
-	if buffer is not None:
-		# Parse search string
-		search_bytes = parse_search_string(search_string)
-		slen = len(search_bytes)
-		if slen > 0:
-			blen = len(buffer)
-			offs = offset
-			if offs < 0:
-				offs = 0
-			last = blen - slen + 1
-			if offs <= last:
-				# Loop all elements
-				i = offs
-				while i < last:
-					# Binary compare
-					if buffer[i, i+slen] == search_bytes:
-						# Search bytes found
-						return i
-					# Next
-					i += 1
-				# Nothing found
-			return blen
+	if buffer is None:
+		return offset
+	# Parse search string
+	search_bytes = parse_search_string(search_string)
+	slen = len(search_bytes)
+	if slen == 0:
+		return offset
+	blen = len(buffer)
+	offs = offset
+	if offs < 0:
+		offs = 0
+	last = blen - slen + 1
+	if offs <= last:
+		# Loop all elements
+		i = offs
+		while i < last:
+			# Binary compare
+			if buffer[i:i+slen] == search_bytes:
+				# Search bytes found
+				return i
+			# Next
+			i += 1
+		# Nothing found
+	return blen

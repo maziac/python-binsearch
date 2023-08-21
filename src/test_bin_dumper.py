@@ -85,6 +85,21 @@ class test_bin_dumper(unittest.TestCase):
         self.assertEqual(str(ctx.exception),"Expected 'd' or 'x'.")
 
 
+    def test_search(self):
+        bin_dumper.read_file("src/test_data/abcdefghijkl.bin")
+        blen = len(bin_dumper.buffer)
+        self.assertEqual(bin_dumper.search(0, ""), 0)
+        self.assertEqual(bin_dumper.search(0, "a"), 0)
+        self.assertEqual(bin_dumper.search(0, "b"), 1)
+        self.assertEqual(bin_dumper.search(2, "c"), 2)
+        self.assertEqual(bin_dumper.search(3, "c"), blen)
+        self.assertEqual(bin_dumper.search(0, "cde"), 2)
+        self.assertEqual(bin_dumper.search(10, "abc"), blen)
+        self.assertEqual(bin_dumper.search(0, "kl"), 10)
+        bin_dumper.buffer = None
+        self.assertEqual(bin_dumper.search(35, "?"), 35)
+
+
 if __name__ == '__main__':
     unittest.main()
 
