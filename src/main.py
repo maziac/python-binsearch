@@ -1,11 +1,9 @@
+import io
+import sys
 import bin_dumper
-
-from pathlib import Path
 
 prg_version = "0.1.0"
 
-import sys
-from pathlib import Path
 
 
 def args_help():
@@ -27,34 +25,84 @@ def args_help():
         """)
 
 
+def get_nth_arg(n: int, args_array ) -> str|None:
+	"""
+	Returns the next argument in 'args_array' or an error if none exists.
+	- 'n' - The index to get from the args_array.
+	- 'args_array' - The array of strings.
+	Returns: The string at 'n' or None if out of range.
+	"""
+	if n >= len(args_array):
+		return None
+	arg = args_array[n]
+	return arg
 
-# Loops through the passed arguments.
-len = len(sys.argv)
 
-i = 1	# Skip first (path)
-while (i < len):
-	# Get next arg
-	arg = sys.argv[i]
-	print(arg)
+def parse_args(args_array: [str], writer: io.BufferedIOBase):
+	"""
+	Loops through the passed arguments and executes them.
+	- 'args_array' - the array with arguments
+	- 'writer' - The writer object (stdout)
+	"""
+	arg_len = len(args_array)
 
-	# Parse arg
-	if arg == "--help":
-		args_help()
-	elif arg == "--version":
-		sys.stdout.write("Version " + prg_version + "\n");
-	elif arg == "--offs":
-		print(arg)
-	elif arg == "--size":
-		print(arg)
-	else:
-		# It is the filename (probably).
-		# Open file:
-		print(arg)
-		read_file(arg)
+	i = 1	# Skip first (path)
+	while (i < arg_len):
+		# Get next arg
+		arg = sys.argv[i]
 
-	# Next
-	i += 1
+		# Parse arg
+		if arg == "--help":
+			args_help()
+		elif arg == "--version":
+			sys.stdout.write("Version " + prg_version + "\n");
+		elif arg == "--offs":
+			# Get next arg
+			i += 1
+			o = get_nth_arg(i, args_array)
+			if o is None:
+				raise Exception("Expected an offset value.")
+			# Check value
+			if (o[0] == '+') or (o[0] == '-'):
+				offs += int(o)
+			else:
+				offs = int(o)
+		elif arg == "--size":
+			# Get next arg
+			i += 1
+			s = get_nth_arg(i, args_array)
+			if s is None:
+				raise Exception("Expected a size value.")
+			# Check for max
+			size = sys.maxsize
+			if s != "all":
+                # It's not "all":
+				size = int(s)
 
-#for entry in target_dir.iterdir():
-#    print(entry.name)
+			bin_dumper.dump(offs, size, writer)
+			offs += size
+		elif arg == "--search":
+			# Get next arg
+			i += 1
+			s = get_nth_arg(i, args_array)
+			if s is None:
+				raise Exception("Expected a value sequence to search for.")
+			offs = bin_dumper.search(offs, s)
+		else:
+			# It is the filename (probably).
+			# Open file:
+			bin_dumper.read_file(arg)
 
+		# Next
+		i += 1
+
+
+
+
+# MAIN:
+# Read in the stdin (in case data is piped)
+#bin_dumper.read_stdio() TODO: enable
+
+# Parse arguments
+#const stdout = std.io.getStdOut().writer();
+#try parse_args(args, stdout);

@@ -1,8 +1,6 @@
 
-from io import BufferedIOBase, IOBase
 import io
 import sys
-import os
 
 
 buffer = None
@@ -44,7 +42,6 @@ def dump(offset: int, size: int, writer: io.BufferedIOBase):
 				count = blen - start
 			end = start + count
 			writer.write(buffer[start:end])
-			#return buffer[start:end]
 
 			# with os.fdopen(sys.stdout.fileno(), "wb", closefd=False) as stdout:
 			# 	stdout.write(slice)
