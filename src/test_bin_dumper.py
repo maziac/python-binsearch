@@ -1,3 +1,4 @@
+import io
 import bin_dumper
 import unittest
 import sys
@@ -26,24 +27,34 @@ class test_bin_dumper(unittest.TestCase):
 
 
     def test_dump_all(self):
+        out = io.BytesIO()
         bin_dumper.read_file("src/test_data/abcdefghijkl.bin")
-        alldata = bin_dumper.dump(0, sys.maxsize, None)
+        bin_dumper.dump(0, sys.maxsize, out)
+        alldata = out.getbuffer()
         self.assertEqual(alldata, b'abcdefghijkl')
 
 
     def test_dump(self):
         bin_dumper.read_file("src/test_data/abcdefghijkl.bin")
         # All
-        part = bin_dumper.dump(0, 12, None);
+        out = io.BytesIO()
+        bin_dumper.dump(0, 12, out);
+        part = out.getbuffer()
         self.assertEqual(part, b'abcdefghijkl')
         # Right
-        part = bin_dumper.dump(8, sys.maxsize, None)
+        out = io.BytesIO()
+        bin_dumper.dump(8, sys.maxsize, out)
+        part = out.getbuffer()
         self.assertEqual(part, b'ijkl')
         # Left
-        part = bin_dumper.dump(-4, 12, None)
+        out = io.BytesIO()
+        bin_dumper.dump(-4, 12, out)
+        part = out.getbuffer()
         self.assertEqual(part, b'abcdefgh')
         # Partial
-        part = bin_dumper.dump(1, 10, None)
+        out = io.BytesIO()
+        bin_dumper.dump(1, 10, out)
+        part = out.getbuffer()
         self.assertEqual(part, b'bcdefghijk')
 
 

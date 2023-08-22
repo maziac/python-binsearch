@@ -1,4 +1,6 @@
 
+from io import BufferedIOBase, IOBase
+import io
 import sys
 import os
 
@@ -21,8 +23,7 @@ def read_stdio():
 	global buffer
 	buffer = sys.stdin.buffer
 
-def dump(offset: int, size: int, writer):
-    # TODO: 'writer' is probably unused
+def dump(offset: int, size: int, writer: io.BufferedIOBase):
 	"""
     Dumps out the contents of a slice of 'buffer' to 'output'.
 	Arguments:
@@ -42,7 +43,8 @@ def dump(offset: int, size: int, writer):
 			if count > blen - start:
 				count = blen - start
 			end = start + count
-			return buffer[start:end]
+			writer.write(buffer[start:end])
+			#return buffer[start:end]
 
 			# with os.fdopen(sys.stdout.fileno(), "wb", closefd=False) as stdout:
 			# 	stdout.write(slice)
