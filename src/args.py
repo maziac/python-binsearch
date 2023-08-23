@@ -96,4 +96,3 @@ def parse_args(args_array: [str], writer: io.BufferedIOBase):
 
 		# Next
 		i += 1
-

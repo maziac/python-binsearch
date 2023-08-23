@@ -16,10 +16,9 @@ def read_file(filepath: str):
 
 def read_stdio():
 	""" Reads from stdio, allocates data and makes 'buffer' point to it. """
-#	stdin = sys.stdin
-#    stdin_size = stdin.buffer.length
 	global buffer
-	buffer = sys.stdin.buffer
+	buffer = sys.stdin.buffer.read()
+
 
 def dump(offset: int, size: int, writer: io.BufferedIOBase):
 	"""
@@ -42,10 +41,6 @@ def dump(offset: int, size: int, writer: io.BufferedIOBase):
 				count = blen - start
 			end = start + count
 			writer.write(buffer[start:end])
-
-			# with os.fdopen(sys.stdout.fileno(), "wb", closefd=False) as stdout:
-			# 	stdout.write(slice)
-			# 	stdout.flush()
 
 
 def parse_search_string(search_string: str) -> bytes:
