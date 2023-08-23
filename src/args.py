@@ -91,8 +91,8 @@ def parse_args(args_array: [str], writer: io.BufferedIOBase):
 			offs = bin_dumper.search(offs, s)
 		else:
 			# It is the filename (probably).
-			# Open file:
 			bin_dumper.read_file(arg)
+			offs = 0
 
 		# Next
 		i += 1
