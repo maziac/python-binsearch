@@ -1,5 +1,6 @@
 
 import io
+import os
 import sys
 
 
@@ -17,7 +18,9 @@ def read_file(filepath: str):
 def read_stdio():
 	""" Reads from stdio, allocates data and makes 'buffer' point to it. """
 	global buffer
-	buffer = sys.stdin.buffer.read()
+	# Check if data is available (if not read would block)
+	if os.isatty(0) == False:
+		buffer = sys.stdin.buffer.read()
 
 
 def dump(offset: int, size: int, writer: io.BufferedIOBase):
