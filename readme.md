@@ -10,7 +10,7 @@ The output is written to stdout and can be redirected into a file or piped to an
 
 # Usage
 
-~~~
+~~~bash
 binsearch file1 [--offs #] [--search tokens] [--size #|all] [file2 [--offs #] ...]
 ~~~
 
