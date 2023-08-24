@@ -4,7 +4,7 @@ import io
 import bin_dumper
 
 
-prg_version = b"0.1.0"
+prg_version = b"1.0.0"
 
 
 def args_help():

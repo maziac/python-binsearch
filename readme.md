@@ -70,39 +70,36 @@ Please note: when searching for a sequence of bytes, a 0 is **not** automaticall
 # Development
 
 TODO:
-
-## Debug build
-
-~~~
-zig build
-~~~
-
-Or through vscode's tasks.json "debug build".
-
-The binary is found at "zig-out/bin/binsearch".
+- tasks.json
+  - to build
+  - to run pyinstaller
+- launch.json: depend on build
 
 
-## Release build
+## Run
 
-~~~
-zig build -Drelease-fast=true
+~~~bash
+python3 src/main.py
 ~~~
 
-Or through vscode's tasks.json "cross build".
 
-This will execute release builds for macos, linux and windows.
-The binary are found at "zig-out/bin":
-- binsearch-linux
-- binsearch-macos
-- binsearch-windows
+## Build executable
+
+~~~bash
+pyinstaller src/main.py --onefile --name bin_search
+~~~
+
+Or through vscode's tasks.json "Create executable".
+
+The binary is found at "dist/bin_search":
 
 
 ## Unit tests
 
 To run unit tests use
-~~~
-zig build test
+~~~bash
+python3 -m unittest  discover --start-directory src --pattern "test*.py" --verbose
 ~~~
 
-
+Or run through vscode's unit test runner.
 

@@ -13,6 +13,7 @@ def read_file(filepath: str):
 	buffer = None	# Just in case an exception is catched
 	file = open(filepath, 'rb')
 	buffer = file.read()
+	file.close()
 
 
 def read_stdio():
