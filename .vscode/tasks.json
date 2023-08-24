@@ -10,7 +10,7 @@
 			"args": [
 				"src/main.py",
 				"--onefile",
-				"--name", "bin_search"
+				"--name", "binsearch"
 			],
 			"problemMatcher": [],
 			"group": {

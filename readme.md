@@ -86,12 +86,12 @@ python3 src/main.py
 ## Build executable
 
 ~~~bash
-pyinstaller src/main.py --onefile --name bin_search
+pyinstaller src/main.py --onefile --name binsearch
 ~~~
 
 Or through vscode's tasks.json "Create executable".
 
-The binary is found at "dist/bin_search":
+The binary is found at "dist/binsearch":
 
 
 ## Unit tests
